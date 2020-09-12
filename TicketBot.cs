@@ -213,18 +213,17 @@ namespace TicketBot
                     string leadingZeroes = leadingZeroFinder(newTicketNumber);
                     //open stream to the tickets file and append to the end of it
                     StreamWriter ticketStream = new StreamWriter("tickets.txt", true);
+                    //find the user that sent the message
+                    var userObject = message.Author;
+                    //grab just their name, nothing else
+                    string userName = userObject.ToString();
                     //add the ticket to the file
-                    ticketStream.WriteLine(leadingZeroes + newTicketNumber + ": " + "open - " + ticksubj);
+                    ticketStream.WriteLine(leadingZeroes + newTicketNumber + ": " + "open - " + ticksubj + "  --  " + userName);
                     //close the stream (always do this)
                     ticketStream.Close();
                     //show user that the ticket has been created
                     string confirmMsg = ("ticket created: " + newTicketNumber + ": " + ticksubj);
                     await message.Channel.SendMessageAsync(confirmMsg);
-                    /*
-                    TODO: make this function grab
-                    the user that sent the message
-                    and put their name in the line
-                    */
                 }
                 //closes a ticket
                 else if (mescon.StartsWith("!ticket close "))
