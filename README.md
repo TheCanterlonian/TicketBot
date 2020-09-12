@@ -21,5 +21,9 @@ while the bot is runing, any message sent in a discord channel it can see that s
 <br>
 List of Discord Commands:
 <br>
-ping - returns "pong" (normally used in debugging, but it's cute so i'll keep it in release)
+ping - returns "pong" (i think it's adorable, but it's useful to test the bot, just to see if it's online)
+<br>
+list - returns a list of all tickets currently in the ticket-listing file
+<br>
+open - creates a new ticket with the subject line of the next command parameter
 <br>
