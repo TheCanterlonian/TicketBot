@@ -1,2 +1,1 @@
-# TicketBot
-support ticket handling
+
