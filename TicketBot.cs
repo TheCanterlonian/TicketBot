@@ -176,11 +176,6 @@ namespace TicketBot
                 {
                     await message.Channel.SendMessageAsync("pong");
                 }
-                //just a little fun
-                else if (((mescon.Contains("bot")) && (mescon.Contains("?"))) && ((mescon.Contains("who")) && (mescon.Contains(" "))))
-                {
-                    await message.Channel.SendMessageAsync("Tiffany is the master of the bots!");
-                }
                 //lists all current tickets
                 else if ((mescon == ("!ticket all")) || (mescon == ("!ticket list")))
                 {
