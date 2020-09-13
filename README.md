@@ -27,4 +27,7 @@ list - returns a list of all tickets currently in the ticket-listing file
 <br>
 open [subject line] - creates a new ticket with the subject line of the next command parameter
 <br>
-close [ticket number] - closes the ticket associated with the number given
+close [ticket number] - closes the ticket associated with the number given (if you find a bug with this, stop using it and let me know immediately on Discord!)
+<br>
+clean - permanently deletes the closed tickets from the file
+<br>
