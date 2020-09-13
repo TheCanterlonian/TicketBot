@@ -25,5 +25,6 @@ ping - returns "pong" (i think it's adorable, but it's useful to test the bot, j
 <br>
 list - returns a list of all tickets currently in the ticket-listing file
 <br>
-open - creates a new ticket with the subject line of the next command parameter
+open [subject line] - creates a new ticket with the subject line of the next command parameter
 <br>
+close [ticket number] - closes the ticket associated with the number given
