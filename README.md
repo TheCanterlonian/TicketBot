@@ -1,6 +1,8 @@
 # TicketBot
 keeps track of support tickets made in Discord.
 <br>
+can only keep 999 tickets in record before it starts turning to mush.
+<br>
 requires dotnet runtime & SDK installed to run.
 <br>
 use "dotnet run" from inside the project folder to run the bot.
@@ -29,5 +31,5 @@ open [subject line] - creates a new ticket with the subject line of the next com
 <br>
 close [ticket number] - closes the ticket associated with the number given (if you find a bug with this, stop using it and let me know immediately on Discord!)
 <br>
-clean - permanently deletes the closed tickets from the file
+clean - permanently deletes the closed tickets from the file (if you don't keep things tidy, i will use this myself)
 <br>
