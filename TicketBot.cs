@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 //useful thingsies
 using System.IO;
@@ -14,8 +15,6 @@ using System.Data;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-//xml reader
-using System.ServiceModel.Syndication;
 
 namespace TicketBot
 {
@@ -238,21 +237,100 @@ namespace TicketBot
                     if (!result)
                     {
                         //tell the user they fucked up
-                        await message.Channel.SendMessageAsync("tickets can only be closed by their ticket integer");
+                        await message.Channel.SendMessageAsync("invalid ticket integer");
                     }
                     //otherwise...
                     else if (result)
                     {
-                        //read all file content into a variable
-                        string fullList = File.ReadAllText("tickets.txt");
+                        //read all file content into an array
+                        string[] fullList = File.ReadAllLines("tickets.txt");
+                        //also read it into a string
+                        string fullString = File.ReadAllText("tickets.txt");
                         //get the leading zeroes value
                         string leadingZeroes = leadingZeroFinder(numberToClose);
-                        /*
-                        TODO: still need to implement the rest of this,
-                        need to find the line in question and replace it
-                        without touching the other lines
-                        */
+                        //initialize the line variable
+                        string lineSingle = string.Empty;
+                        //create a string reader using the fullString as input
+                        using (StringReader reader = new StringReader(fullString))
+                        {
+                            //this is a do loop, i never use these, see the condition below
+                            do
+                            {
+                                //move the line into it's own variable alone
+                                lineSingle = reader.ReadLine();
+                                //only continue if the line is not null or empty
+                                if ((lineSingle != null) && (lineSingle != ""))
+                                {
+                                    //only continue if the legitimate ticket number was used
+                                    if ((lineSingle.StartsWith(whichToClose + ": ")) || (lineSingle.StartsWith(leadingZeroes + whichToClose + ": ")))
+                                    {
+                                        //check if the ticket is open still
+                                        if (lineSingle.Contains("open"))
+                                        {
+                                            //replace the in-line determinant
+                                            lineSingle = lineSingle.Replace("open", "closed");
+                                            //make a zero-based integer to determine which position in the array to edit
+                                            int integerToClose = numberToClose - 1;
+                                            //edit the array element to contain the same value as the line
+                                            fullList[integerToClose] = (lineSingle);
+                                            //write the array to the file
+                                            File.WriteAllLines("tickets.txt", fullList);
+                                            //tell the user that the task has been completed
+                                            await message.Channel.SendMessageAsync("ticket " + whichToClose + " has been closed");
+                                        }
+                                        //if the ticket is not open
+                                        else
+                                        {
+                                            //tell the user about this folly
+                                            await message.Channel.SendMessageAsync("ticket is not open");
+                                        }
+                                    }
+                                    //if line can't be found
+                                    else
+                                    {
+                                        //do nothing
+                                    }
+                                }
+                                //if the line to edit is null or empty
+                                else
+                                {
+                                    //do nothing
+                                }
+                            } while (lineSingle != null);
+                            //above is the condition for the do loop, i hate these
+                        }
                     }
+                }
+                //clears out closed tickets
+                else if (mescon == ("!ticket clean"))
+                {
+                    //read file into an array
+                    string[] fullFile = File.ReadAllLines("tickets.txt");
+                    //create a counter and set it to negative one
+                    int counter = (-1);
+                    //loop through all elements in the array
+                    foreach (string lineItself in fullFile)
+                    {
+                        counter = counter + (1);
+                        //only continue if the line is closed
+                        if (lineItself.Contains(": closed - "))
+                        {
+                            //delete the contents of the line
+                            fullFile[counter] = ("");
+                        }
+                        //otherwise
+                        else
+                        {
+                            //do nothing
+                        }
+                    }
+                    //put the array into a string
+                    string fullLines = string.Join("\r\n", fullFile);
+                    //regular expression i stole from the internet, i don't know how or why it works
+                    fullLines = Regex.Replace(fullLines, @"^\s+$[\r\n]*", string.Empty, RegexOptions.Multiline);
+                    //write the string back to the file
+                    File.WriteAllText("tickets.txt", fullLines);
+                    await message.Channel.SendMessageAsync("ticket list cleaned");
                 }
                 //if no matching command is found
                 else
